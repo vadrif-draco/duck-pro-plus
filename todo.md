@@ -1,0 +1,12 @@
+- [ ] Global variables in angular
+- [ ] Environment variables in angular
+- [ ] Reactive Forms: More powerful than Template-driven Forms for complex validation and dynamic form controls
+- [ ] HTTP Client: Making API calls to backend services and handling responses
+  - [ ] With duck API
+- [ ] Observable and RxJS: Understanding reactive programming with Observables for async operations
+- [ ] Route Guards: Protecting routes based on authentication, permissions, or other conditions
+- [ ] Lazy Loading: Loading modules on-demand to improve initial load performance
+- [ ] Angular Animations: Creating smooth transitions and animations in the UI (e.g., show featured duck should be animated, etc.)
+- [ ] Interceptors: Handling HTTP requests and responses globally
+- [ ] Custom Form Validators: Creating reusable validation logic
+- [ ] Firebase Integration: Using Firebase for authentication, database, and hostingCan mix those up in one example; for exampe route guards for different duck tabs, lazy loading for duck module, ...
