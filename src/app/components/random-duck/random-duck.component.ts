@@ -76,7 +76,7 @@ export class RandomDuckComponent implements OnInit, OnDestroy {
         const containerWidth = this.duckContainer.nativeElement.offsetWidth;
 
         this.quoteBubbleStyle = {
-          left: `${Math.round(containerWidth) - Math.ceil(containerWidth / 100) * 10}px`,
+          left: `${Math.round(containerWidth) - Math.ceil(containerWidth / 100) * 5}px`,
         };
 
         this.quoteLoading = false;

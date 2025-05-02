@@ -4,7 +4,7 @@
   [class.endangered]="duck.isEndangered"
   [class.featured]="duck.isFeatured"
   appHighlight
-  [highlightColor]="duck.isEndangered ? '#ffebee' : (duck.isFeatured ? '#fff8e1' : '#e8f5e9')"
+  [highlightColor]="duck.isEndangered ? '#ffebee' : duck.isFeatured ? '#fff8e1' : '#e8f5e9'"
   (click)="toggleDetails()"
 >
   <div class="duck-image-container">
@@ -15,7 +15,7 @@
 
   <div class="duck-details">
     <h2>{{ duck.name }}</h2>
-    <p class="duck-description">{{ showDetails ? duck.fact : (duck.fact | truncate:45) }}</p>
+    <p class="duck-description">{{ showDetails ? duck.fact : (duck.fact | truncate : 45) }}</p>
 
     <div class="duck-metadata" [@expandCollapse]="showDetails ? 'expanded' : 'collapsed'">
       <p><strong>Habitat:</strong> {{ duck.habitat }}</p>
