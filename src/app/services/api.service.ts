@@ -34,7 +34,7 @@ export type QuoteProvider = "dummyJson" | "jokeApi";
   providedIn: "root",
 })
 export class ApiService {
-  private readonly fallbackDuckImage = "/assets/Harlequin404.gif";
+  private readonly fallbackDuckImage = "assets/Harlequin404.gif";
 
   constructor(private http: HttpClient) {}
 
