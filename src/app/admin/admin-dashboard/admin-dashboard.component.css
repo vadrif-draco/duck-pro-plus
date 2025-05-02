@@ -1,0 +1,157 @@
+.admin-dashboard {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+h1 {
+  margin-bottom: 24px;
+  color: #333;
+}
+
+h2 {
+  margin-bottom: 16px;
+  color: #444;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+.stats-section,
+.actions-section,
+.recent-ducks-section {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.stat-card {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3f51b5;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.action-button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-button.danger {
+  background-color: #f44336;
+}
+
+.action-button.danger:hover {
+  background-color: #e53935;
+}
+
+.action-icon {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.recent-ducks-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.duck-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.duck-thumbnail {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.duck-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.duck-info p {
+  margin: 4px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.duck-tag {
+  display: inline-block;
+  background-color: #ff5252;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin-right: 8px;
+}
+
+.duck-tag.featured {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.duck-action {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.duck-action.edit {
+  background-color: #2196F3;
+  color: white;
+}

@@ -1,0 +1,14 @@
+<div class="fancy-container">
+  <header class="fancy-header">
+    <h2>{{ duck.name }}</h2>
+  </header>
+  <div class="content">
+    <div class="projected-content">
+      <ng-content></ng-content>
+    </div>
+    <div class="duck-details">
+      <p>Habitat: {{ duck.habitat }}</p>
+      <p>Endangered: {{ duck.isEndangered ? "Yes" : "No" }}</p>
+    </div>
+  </div>
+</div>

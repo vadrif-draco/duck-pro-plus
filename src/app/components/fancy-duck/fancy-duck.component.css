@@ -1,0 +1,29 @@
+.fancy-container {
+    border: 2px solid gold;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fancy-header {
+    background-color: #ffeb3b;
+    padding: 10px;
+    text-align: center;
+}
+
+.content {
+    padding: 15px;
+    display: flex;
+}
+
+.projected-content {
+    flex: 1;
+    padding-right: 10px;
+}
+
+.duck-details {
+    flex: 1;
+    border-left: 1px solid #eee;
+    padding-left: 10px;
+}

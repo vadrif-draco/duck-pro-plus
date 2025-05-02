@@ -1,0 +1,16 @@
+<div class="search-container">
+  <input [(ngModel)]="searchTerm" placeholder="Search ducks..." (input)="filterDucks()" #searchInput />
+</div>
+<div *ngIf="favoriteDucks.length > 0" class="favorites">
+  <h3>Favorite Ducks</h3>
+  <p>{{ getFavoriteDuckNames() }}</p>
+</div>
+<div class="duck-list">
+  <app-duck-card
+    [ngStyle]="{ 'grid-row': getGridRow(i) }"
+    *ngFor="let duck of filteredDucks; index as i"
+    [duck]="duck"
+    (favorite)="addToFavorites($event)"
+  >
+  </app-duck-card>
+</div>

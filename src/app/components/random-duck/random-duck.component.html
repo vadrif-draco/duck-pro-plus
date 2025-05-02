@@ -1,0 +1,38 @@
+<div class="random-duck-container">
+  <h2>{{ duckId ? "Specific Duck #" + duckId : "Random Duck Generator" }}</h2>
+
+  <div class="duck-quote-container" *ngIf="!loading; else loadingTemplate" [@fadeInOut]="'visible'">
+    <div class="duck-image-container" #duckContainer>
+      <img
+        *ngIf="duckImageUrl"
+        [src]="duckImageUrl"
+        alt="{{ duckId ? 'Duck #' + duckId : 'Random Duck' }}"
+        class="duck-image"
+        (load)="onImageLoad()"
+      />
+      <div class="quote-bubble" *ngIf="quoteText" [ngStyle]="quoteBubbleStyle" [class.loading]="quoteLoading">
+        <p>"{{ quoteText }}"</p>
+        <small>- {{ quoteAuthor }}</small>
+      </div>
+    </div>
+
+    <div *ngIf="!duckId && duckImageUrl" class="share-container">
+      <p>
+        <a [routerLink]="['/random-duck', extractDuckId()]">🔗 Permalink to this duck</a>
+      </p>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-container" [@fadeInOut]="'visible'">
+      <p>Looking for a duck...</p>
+      <div class="loading-spinner"></div>
+    </div>
+  </ng-template>
+
+  <button *ngIf="!duckId" class="fetch-button" (click)="fetchRandomDuckWithQuote()" [disabled]="loading">
+    {{ loading ? "Fetching Duck..." : "Get Random Duck" }}
+  </button>
+
+  <button *ngIf="duckId" class="fetch-button" routerLink="/random-duck" [disabled]="loading">Get a Random Duck Instead</button>
+</div>

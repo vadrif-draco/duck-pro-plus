@@ -1,0 +1,93 @@
+.duck-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  min-height: 320px;
+  cursor: pointer;
+}
+
+.duck-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.duck-card.endangered {
+  border-left: 5px solid #ff5252;
+}
+
+.duck-card.featured {
+  border-left: 5px solid #ffc107;
+}
+
+.duck-image-container {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.duck-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.endangered-label, .featured-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.endangered-label {
+  background-color: #ff5252;
+  color: white;
+}
+
+.featured-label {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.duck-details {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.4rem;
+}
+
+.duck-description {
+  color: #666;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.duck-metadata {
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  overflow: hidden;
+}
+
+.duck-metadata p {
+  margin: 8px 0;
+}
+
+.duck-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}

@@ -1,0 +1,58 @@
+<div class="admin-dashboard">
+  <h1>Admin Dashboard</h1>
+  <div class="dashboard-content">
+    <div class="stats-section">
+      <h2>Duck Stats</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">{{ ducks.length }}</div>
+          <div class="stat-label">Total Ducks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ getEndangeredDucksCount() }}</div>
+          <div class="stat-label">Endangered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ getFeaturedDucksCount() }}</div>
+          <div class="stat-label">Featured</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-section">
+      <h2>Actions</h2>
+      <div class="action-buttons">
+        <button class="action-button" routerLink="/admin/duck-editor">
+          <span class="action-icon">➕</span>
+          Add New Duck
+        </button>
+        <button class="action-button" (click)="refreshData()">
+          <span class="action-icon">🔄</span>
+          Refresh Data
+        </button>
+        <button class="action-button danger" (click)="logout()">
+          <span class="action-icon">🚪</span>
+          Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="recent-ducks-section">
+      <h2>Recent Ducks</h2>
+      <div class="recent-ducks-list">
+        <div class="duck-row" *ngFor="let duck of recentDucks">
+          <img [src]="duck.imageUrl" [alt]="duck.name" class="duck-thumbnail" />
+          <div class="duck-info">
+            <h3>{{ duck.name }}</h3>
+            <p>{{ duck.habitat }}</p>
+            <span class="duck-tag" *ngIf="duck.isEndangered">Endangered</span>
+            <span class="duck-tag featured" *ngIf="duck.isFeatured">Featured</span>
+          </div>
+          <div class="duck-actions">
+            <button class="duck-action edit" routerLink="/admin/duck-editor/{{ duck.id }}">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

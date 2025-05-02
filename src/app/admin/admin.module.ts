@@ -3,9 +3,9 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 
-import { AdminDashboardComponent } from "./components/admin-dashboard/admin-dashboard.component";
-import { DuckEditorComponent } from "./components/duck-editor/duck-editor.component";
-import { AdminLoginComponent } from "./components/admin-login/admin-login.component";
+import { AdminDashboardComponent } from "./admin-dashboard/admin-dashboard.component";
+import { DuckEditorComponent } from "./duck-editor/duck-editor.component";
+import { AdminLoginComponent } from "./admin-login/admin-login.component";
 import { AdminGuard } from "./guards/admin.guard";
 
 @NgModule({

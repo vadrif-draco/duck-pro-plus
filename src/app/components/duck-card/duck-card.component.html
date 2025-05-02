@@ -1,0 +1,24 @@
+<div
+  class="duck-card"
+  *ngIf="duck"
+  [class.endangered]="duck.isEndangered"
+  [class.featured]="duck.isFeatured"
+  appHighlight
+  [highlightColor]="duck.isEndangered ? '#ffebee' : (duck.isFeatured ? '#fff8e1' : '#e8f5e9')"
+  (click)="toggleDetails()"
+>
+  <div class="duck-image-container">
+    <img [src]="duck.imageUrl" [alt]="duck.name" class="duck-image" />
+    <span *ngIf="duck.isEndangered" class="endangered-label">Endangered</span>
+    <span *ngIf="duck.isFeatured" class="featured-label">Featured</span>
+  </div>
+
+  <div class="duck-details">
+    <h2>{{ duck.name }}</h2>
+    <p class="duck-description">{{ showDetails ? duck.fact : (duck.fact | truncate:45) }}</p>
+
+    <div class="duck-metadata" [@expandCollapse]="showDetails ? 'expanded' : 'collapsed'">
+      <p><strong>Habitat:</strong> {{ duck.habitat }}</p>
+    </div>
+  </div>
+</div>

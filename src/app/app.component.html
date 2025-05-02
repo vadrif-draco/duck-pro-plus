@@ -1,0 +1,17 @@
+<header class="app-header" [@fadeSlideInOut]>
+  <div class="header-content">
+    <!-- <h1>{{ appTitle }}</h1> -->
+    <h1 [innerHTML]="appTitle"></h1>
+    <p class="app-subtitle">{{ environment.production ? "Production" : "Development" }} Environment</p>
+  </div>
+</header>
+
+<app-navigation></app-navigation>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<footer [@fadeSlideInOut]>
+  <p>{{ footerText }}</p>
+</footer>
