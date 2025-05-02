@@ -16,4 +16,8 @@ export const environment = {
     enableRandomDuckFeature: true,
     enableFirebaseIntegration: false,
   },
+
+  // CORS Proxy Configuration
+  enableCorsProxy: true,
+  corsProxyUrl: "https://corsproxy.io/",
 };
