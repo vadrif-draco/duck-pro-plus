@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError, of, forkJoin } from "rxjs";
 import { map, catchError, switchMap, retry, tap, delay } from "rxjs/operators";
 import { environment } from "../../environments/environment";
-import { fallbackDuckImage } from "../../../public/assets/fallback-duck";
 
 interface RandomDuckResponse {
   url: string;
@@ -35,20 +34,18 @@ export type QuoteProvider = "dummyJson" | "jokeApi";
   providedIn: "root",
 })
 export class ApiService {
+  private readonly fallbackDuckImage = "/assets/Harlequin404.gif";
+
   constructor(private http: HttpClient) {}
 
   getRandomDuck(): Observable<string> {
-    const headers = new HttpHeaders();
-    headers.append("origin", "nul");
-
-    return this.http.get<RandomDuckResponse>(environment.randomDuckApiUrl, { headers }).pipe(
+    return this.http.get<RandomDuckResponse>(environment.randomDuckApiUrl).pipe(
       tap((response) => console.log("Duck API response:", response)),
       map((response) => response.url),
       retry(2),
       catchError((error) => {
         console.error("Error fetching random duck:", error);
-
-        return of(fallbackDuckImage);
+        return of(this.fallbackDuckImage);
       })
     );
   }
@@ -75,6 +72,7 @@ export class ApiService {
 
   getQuoteForDuck(duckUrl: string): Observable<QuoteResponse> {
     const quoteId = this.getQuoteIdFromDuckUrl(duckUrl);
+    console.log(duckUrl, quoteId);
 
     const provider = environment.quoteProvider as QuoteProvider;
 
