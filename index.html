@@ -5,9 +5,18 @@
     <title>Duck Pro+</title>
     <base href="/duck-pro-plus/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon/frame_00.gif">
   <style>*{font-family:Arial}</style><link rel="stylesheet" href="styles-CEHXXCRM.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-CEHXXCRM.css"></noscript></head>
   <body>
     <app-root></app-root>
   <link rel="modulepreload" href="chunk-GOQCU7N5.js"><script src="polyfills-FFHMD2TL.js" type="module"></script><script src="main-2DDE7RGS.js" type="module"></script></body>
+  <script>
+    const favicon_icon_tag = document.querySelector("link[rel='icon']");
+    const favicon_frames = Array.from({ length: 17 }, (_, i) => {
+      return `favicon/${i.toString().padStart(2, "0")}.gif`;
+    });
+    setInterval(function () {
+      favicon_icon_tag.href = favicon_frames[(parseInt(favicon_icon_tag.href.match(/(\d+)\.gif/)[1]) + 1) % favicon_frames.length];
+    }, 133);
+  </script>
 </html>
