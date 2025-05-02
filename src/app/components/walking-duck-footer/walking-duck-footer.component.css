@@ -1,0 +1,39 @@
+.walking-duck-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.walking-duck {
+    object-fit: cover;
+    object-position: 0%;
+    position: fixed;
+    height: 30px;
+    width: 30px;
+    transition: transform 0.2s ease, bottom 0.3s ease, left 0.1s linear;
+    cursor: pointer;
+    pointer-events: auto;
+    animation: gif steps(9) 1s infinite both;
+}
+
+.walking-duck.sitting {
+    animation-play-state: paused;
+    transform-origin: bottom center;
+    bottom: -5px !important;
+    object-position: 0% !important;
+    transform: scale(1.1) !important;
+}
+
+@keyframes gif {
+    0% {
+        object-position: 0%;
+    }
+
+    100% {
+        object-position: 100%;
+    }
+}

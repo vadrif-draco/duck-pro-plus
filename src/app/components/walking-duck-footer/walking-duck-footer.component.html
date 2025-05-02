@@ -1,0 +1,13 @@
+<div class="walking-duck-container">
+  <img
+    src="assets/walking-duck-sprite-sheet.png"
+    alt="Walking Duck"
+    class="walking-duck"
+    [class.sitting]="isSitting"
+    [style.left.px]="duckPosition"
+    [style.transform]="duckDirection === -1 ? 'scaleX(-1)' : 'scaleX(1)'"
+    [style.bottom.px]="isSitting ? -2 : 0"
+    (load)="onDuckImageLoad($event)"
+    (click)="toggleDuckState()"
+  />
+</div>

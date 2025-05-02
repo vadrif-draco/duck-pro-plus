@@ -4,11 +4,12 @@ import { RouterOutlet } from "@angular/router";
 import { NavigationComponent } from "./components/navigation/navigation.component";
 import { environment } from "../environments/environment";
 import { trigger, transition, style, animate } from "@angular/animations";
+import { WalkingDuckFooterComponent } from "./components/walking-duck-footer/walking-duck-footer.component";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavigationComponent],
+  imports: [CommonModule, RouterOutlet, NavigationComponent, WalkingDuckFooterComponent],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
   animations: [
