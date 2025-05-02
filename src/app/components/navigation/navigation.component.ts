@@ -1,13 +1,16 @@
 import { Component } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { RouterLink, RouterLinkActive } from "@angular/router";
+
 @Component({
   standalone: true,
   selector: "app-navigation",
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive],
   template: `
     <nav>
-      <a routerLink="/">Home</a>
-      <a routerLink="/about">About Ducks</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a routerLink="/about" routerLinkActive="active">About Ducks</a>
+      <a routerLink="/random-duck" routerLinkActive="active">Random Duck</a>
+      <a routerLink="/admin" routerLinkActive="active">Admin Area</a>
     </nav>
   `,
   styles: [
@@ -15,11 +18,24 @@ import { RouterLink } from "@angular/router";
       nav {
         background: #f0f0f0;
         padding: 1rem;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
       }
       a {
-        margin-right: 1rem;
         text-decoration: none;
         color: #333;
+        padding: 8px 16px;
+        border-radius: 4px;
+        transition: all 0.3s;
+      }
+      a:hover {
+        background-color: #e0e0e0;
+      }
+      .active {
+        background-color: #ffeb3b;
+        font-weight: bold;
       }
     `,
   ],

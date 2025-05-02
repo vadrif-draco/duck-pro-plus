@@ -1,96 +1,91 @@
 import { Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { NavigationComponent } from "./components/navigation/navigation.component";
-import { FancyDuckComponent } from "./components/fancy-duck/fancy-duck.component";
-import { CommonModule } from "@angular/common";
-import { DuckService } from "./services/duck.service";
-import { Duck } from "./interfaces/duck-interface";
+import { environment } from "../environments/environment";
+import { trigger, transition, style, animate } from "@angular/animations";
+
 @Component({
-  standalone: true,
   selector: "app-root",
-  imports: [NavigationComponent, RouterOutlet, FancyDuckComponent, CommonModule],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, NavigationComponent],
   template: `
-    <header>
-      <h1>Duck Encyclopedia</h1>
-      <app-navigation></app-navigation>
-    </header>
-    <main>
-      <div class="featured-duck-container">
-        <div *ngIf="showFancyDuck && featuredDuck" class="featured-duck">
-          <app-fancy-duck [duck]="featuredDuck">
-            <img [src]="featuredDuck.imageUrl" [alt]="featuredDuck.name" width="200" />
-            <p #projectedCaption>This is our featured duck of the month!</p>
-          </app-fancy-duck>
-          <button class="control-btn" (click)="toggleFeaturedDuck()">Hide Featured Duck</button>
-        </div>
-        <div *ngIf="!showFancyDuck && featuredDuck" class="featured-duck-toggle">
-          <button class="control-btn show-btn" (click)="toggleFeaturedDuck()">Show Featured Duck ({{ featuredDuck.name }})</button>
-        </div>
+    <header class="app-header" [@fadeSlideInOut]>
+      <div class="header-content">
+        <!-- <h1>{{ appTitle }}</h1> -->
+        <h1 [innerHTML]="appTitle"></h1>
+        <p class="app-subtitle">{{ environment.production ? "Production" : "Development" }} Environment</p>
       </div>
+    </header>
+
+    <app-navigation></app-navigation>
+
+    <main>
       <router-outlet></router-outlet>
     </main>
-    <footer>
-      <p>© 2025 Duck Encyclopedia</p>
+
+    <footer [@fadeSlideInOut]>
+      <p>{{ footerText }}</p>
     </footer>
   `,
   styles: [
     `
-      :host {
-        display: block;
-        font-family: Arial, sans-serif;
-        max-width: 1200px;
+      .app-header {
+        background-color: #ffeb3b;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        max-width: 800px;
         margin: 0 auto;
       }
-      header {
-        text-align: center;
-        padding: 1rem;
-        background-color: #f0f0f0;
-        margin-bottom: 1rem;
+
+      h1 {
+        margin: 0;
+        color: #333;
+        font-size: 2.5rem;
       }
+
+      .app-subtitle {
+        font-style: italic;
+        color: #666;
+        margin-top: 0.5rem;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        min-height: calc(100vh - 300px);
+      }
+
       footer {
-        text-align: center;
+        background-color: #f5f5f5;
         padding: 1rem;
-        margin-top: 2rem;
-        border-top: 1px solid #ccc;
-      }
-      .featured-duck-container {
-        margin: 20px 0;
         text-align: center;
-      }
-      .featured-duck,
-      .featured-duck-toggle {
-        margin: 20px 0;
-        text-align: center;
-      }
-      .control-btn {
-        padding: 8px 16px;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 10px;
-        transition: all 0.2s;
-      }
-      .control-btn:hover {
-        background-color: #e0e0e0;
-      }
-      .show-btn {
-        background-color: #fffde7;
-        border: 2px solid #ffeb3b;
-        font-weight: bold;
+        color: #666;
+        border-top: 1px solid #eee;
       }
     `,
   ],
+  animations: [
+    trigger("fadeSlideInOut", [
+      transition(":enter", [
+        style({ opacity: 0, transform: "translateY(-10px)" }),
+        animate("0.5s ease-out", style({ opacity: 1, transform: "translateY(0)" })),
+      ]),
+      transition(":leave", [animate("0.5s ease-in", style({ opacity: 0, transform: "translateY(-10px)" }))]),
+    ]),
+  ],
 })
 export class AppComponent implements OnInit {
-  title = "Duck Encyclopedia";
-  featuredDuck: Duck | undefined;
-  showFancyDuck = false;
-  constructor(private duckService: DuckService) {}
+  appTitle = environment.appName.replace("+", "<sup>+</sup>");
+  environment = environment;
+  footerText = `© ${new Date().getFullYear()} Duck Encyclopedia - All rights reserved`;
+
   ngOnInit() {
-    this.featuredDuck = this.duckService.getFeaturedDuck();
-  }
-  toggleFeaturedDuck() {
-    this.showFancyDuck = !this.showFancyDuck;
+    console.log("App initialized with environment:", environment.production ? "Production" : "Development");
   }
 }
