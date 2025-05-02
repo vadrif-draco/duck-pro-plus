@@ -8,8 +8,9 @@ export const environment = {
     jokeApi: "https://official-joke-api.appspot.com/jokes",
   },
 
+  // quoteProvider: "dummyJson",
   quoteProvider: "jokeApi",
-  appName: "Duck Pro+",
+  appName: "Duck Pro+ Encyclopedia",
   features: {
     enableAnimations: true,
     enableRandomDuckFeature: true,
