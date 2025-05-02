@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   apiUrl: "https://api.example.com",
-  randomDuckApiUrl: "https://random-d.uk/api/v2/random",
+  randomDuckApiUrl: "https://random-d.uk/api/v2/quack",
 
   quoteApiUrl: {
     dummyJson: "https://dummyjson.com/quotes",
