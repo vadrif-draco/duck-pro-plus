@@ -1,9 +1,11 @@
 export interface Duck {
-  id: number;
+  id: string;
   name: string;
+  scientificName?: string;
+  description?: string;
   imageUrl: string;
   habitat: string;
-  fact: string;
+  facts: string[];
   isEndangered: boolean;
   isFeatured?: boolean;
 }

@@ -24,10 +24,15 @@ import { AdminGuard } from "./guards/admin.guard";
         canActivate: [AdminGuard],
       },
       {
-        path: "editor",
+        path: "duck-editor",
         component: DuckEditorComponent,
         canActivate: [AdminGuard],
       },
+      {
+        path: "duck-editor/:id",
+        component: DuckEditorComponent,
+        canActivate: [AdminGuard],
+      }
     ]),
   ],
   providers: [AdminGuard],

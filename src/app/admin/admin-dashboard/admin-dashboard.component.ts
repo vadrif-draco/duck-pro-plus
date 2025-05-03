@@ -34,8 +34,16 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   loadDucks(): void {
-    this.ducks = this.duckService.getDucks();
-    this.recentDucks = [...this.ducks].sort((a, b) => b.id - a.id).slice(0, 5);
+    // this.ducks = this.duckService.getDucks();
+    this.duckService.getDucks().subscribe((ducks) => {
+      this.ducks = ducks;
+      if (this.ducks) {
+        this.recentDucks = [...this.ducks].reverse().slice(0, 5);
+      } else {
+        this.recentDucks = [];
+        console.log("No ducks found");
+      }
+    })
   }
 
   getEndangeredDucksCount(): number {

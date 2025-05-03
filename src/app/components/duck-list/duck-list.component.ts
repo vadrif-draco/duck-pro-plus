@@ -22,8 +22,16 @@ export class DuckListComponent implements OnInit, AfterViewInit {
   constructor(private duckService: DuckService) {}
 
   ngOnInit() {
-    this.ducks = this.duckService.getDucks();
-    this.filteredDucks = this.ducks;
+    // this.ducks = this.duckService.getDucks();
+    this.duckService.getDucks().subscribe((ducks) => {
+      this.ducks = ducks;
+      if (this.ducks.length > 0) {
+        this.filteredDucks = this.ducks;
+      } else {
+        this.filteredDucks = [];
+        console.log("No ducks found");
+      }
+    });
   }
 
   ngAfterViewInit() {

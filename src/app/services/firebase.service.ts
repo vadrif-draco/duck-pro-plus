@@ -1,59 +1,30 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Observable, of, throwError } from "rxjs";
-import { catchError, map, tap } from "rxjs/operators";
 import { environment } from "../../environments/environment";
+import { arrayUnion, doc, DocumentReference, Firestore, onSnapshot, updateDoc } from "@angular/fire/firestore";
+import { Duck } from "../interfaces/duck-interface";
 
-export interface DuckData {
-  id: string;
-  name: string;
-  scientificName: string;
-  description: string;
-  imageUrl: string;
-  facts: string[];
-  habitat: string[];
-  isEndangered: boolean;
-}
 
 @Injectable({
   providedIn: "root",
 })
 export class FirebaseService {
-  private ducks: DuckData[] = [
-    {
-      id: "mallard1",
-      name: "Mallard",
-      scientificName: "Anas platyrhynchos",
-      description:
-        "The mallard is a dabbling duck that breeds throughout the temperate and subtropical Americas, Eurosiberia, and North Africa and has been introduced to New Zealand, Australia, Peru, Brazil, Uruguay, Argentina, Chile, Colombia, the Falkland Islands, and South Africa.",
-      imageUrl: "https://random-d.uk/api/60.jpg",
-      facts: [
-        "Mallards can live for 5-10 years in the wild",
-        "They are omnivorous and eat a variety of food sources",
-        "The mallard is the ancestor of most domestic duck breeds",
-      ],
-      habitat: ["Wetlands", "Parks", "Ponds"],
-      isEndangered: false,
-    },
-    {
-      id: "wood2",
-      name: "Wood Duck",
-      scientificName: "Aix sponsa",
-      description:
-        "The wood duck is a perching duck species found in North America. They are known for their colorful plumage and ability to perch in trees, which is unusual for ducks.",
-      imageUrl: "https://random-d.uk/api/32.jpg",
-      facts: [
-        "Wood ducks nest in tree cavities",
-        "Ducklings jump from nesting trees shortly after hatching",
-        "They can fly through woods with agility",
-      ],
-      habitat: ["Wooded swamps", "Marshes", "Streams"],
-      isEndangered: false,
-    },
-  ];
 
-  constructor(private http: HttpClient) {
+  ducksDoc: DocumentReference;
+  ducksListObservable: Observable<Duck[]>;
+  ducksList: Duck[] = [];
+
+  // constructor(private fs: Firestore, private duckService: DuckService) {
+  constructor(private fs: Firestore) {
     console.log("Firebase service initialized");
+    this.ducksDoc = doc(this.fs, `${environment.firestoreCollection}/ducks`);
+    this.ducksListObservable = new Observable<Duck[]>((subscriber) => {
+      onSnapshot(this.ducksDoc, (doc) => {
+        let ducksDocData = doc.data() ?? { "ducksArray": [] };
+        subscriber.next(ducksDocData["ducksArray"]);
+        this.ducksList = ducksDocData["ducksArray"];
+      });
+    });
   }
 
   login(email: string, password: string): Observable<any> {
@@ -86,44 +57,55 @@ export class FirebaseService {
     return !!this.getCurrentUser();
   }
 
-  getDucks(): Observable<DuckData[]> {
+  getDucks(): Observable<Duck[]> {
     console.log("Fetching ducks from Firebase");
-    return of(this.ducks).pipe(
-      tap((ducks) => console.log(`Retrieved ${ducks.length} ducks`)),
-      catchError(this.handleError<DuckData[]>("getDucks", []))
-    );
+    return this.ducksListObservable;
   }
 
-  getDuck(id: string): Observable<DuckData> {
-    const duck = this.ducks.find((d) => d.id === id);
-    if (!duck) {
-      return throwError(() => new Error(`Duck with id ${id} not found`));
-    }
-    return of(duck);
+  getDuck(id: string): Observable<Duck | undefined> {
+    // const duck = this.ducks.find((d) => d.id === id);
+    // if (!duck) {
+    //   return throwError(() => new Error(`Duck with id ${id} not found`));
+    // }
+    // return of(duck);
+    return new Observable<Duck | undefined>((subscriber) => {
+      const unsub = onSnapshot(this.ducksDoc, (doc) => {
+        subscriber.next(doc.data()!['ducksArray'].filter((duck: Duck) => (duck.id == id))[0])
+      })
+      return () => { unsub(); };
+    })
   }
 
-  addDuck(duck: DuckData): Observable<DuckData> {
-    this.ducks.push(duck);
-    return of(duck);
+  addDuck(duck: Duck): Promise<void> {
+    // this.ducks.push(duck);
+    // return of(duck);
+    return updateDoc(this.ducksDoc, { ducksArray: arrayUnion(duck) })
   }
 
-  updateDuck(duck: DuckData): Observable<DuckData> {
-    const index = this.ducks.findIndex((d) => d.id === duck.id);
-    if (index !== -1) {
-      this.ducks[index] = duck;
-      return of(duck);
-    }
-    return throwError(() => new Error(`Duck with id ${duck.id} not found`));
+  updateDuck(duck: Duck): Promise<void> {
+    // const index = this.ducks.findIndex((d) => d.id === duck.id);
+    // if (index !== -1) {
+    //   this.ducks[index] = duck;
+    //   return of(duck);
+    // }
+    // return throwError(() => new Error(`Duck with id ${duck.id} not found`));
+    let ducks = [...this.ducksList];
+    const index = ducks.findIndex((d) => d.id == duck.id);
+    if (index !== -1) { ducks[index] = duck; }
+    return updateDoc(this.ducksDoc, { ducksArray: ducks })
   }
 
-  deleteDuck(id: string): Observable<void> {
-    const index = this.ducks.findIndex((d) => d.id === id);
-    if (index !== -1) {
-      this.ducks.splice(index, 1);
-      return of(undefined);
-    }
-    return throwError(() => new Error(`Duck with id ${id} not found`));
-  }
+  // deleteDuck(id: string): Promise<void> {
+  //   // const index = this.ducks.findIndex((d) => d.id === id);
+  //   // if (index !== -1) {
+  //   //   this.ducks.splice(index, 1);
+  //   //   return of(undefined);
+  //   // }
+  //   // return throwError(() => new Error(`Duck with id ${id} not found`));
+  //   // return updateDoc(this.ducksDoc, {
+  //   //   arrayRemove(duck)
+  //   // })
+  // }
 
   private handleError<T>(operation = "operation", result?: T) {
     return (error: any): Observable<T> => {
@@ -131,4 +113,9 @@ export class FirebaseService {
       return of(result as T);
     };
   }
+
+  // addAllDucks() {
+  //   const allDucksMockData = this.duckService.getDucks()
+  //   return updateDoc(this.ducksDoc, {ducksArray: allDucksMockData})
+  // }
 }

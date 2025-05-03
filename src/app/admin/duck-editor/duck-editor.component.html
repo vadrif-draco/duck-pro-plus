@@ -1,7 +1,7 @@
 <div class="duck-editor" [@fadeIn]>
   <h2>Duck Database Editor</h2>
 
-  <form [formGroup]="duckForm" (ngSubmit)="onSubmit()">
+  <form *ngIf="duckForm" [formGroup]="duckForm" (ngSubmit)="onSubmit()">
     <div class="form-section main-details">
       <h3>Main Details</h3>
 
@@ -29,6 +29,12 @@
         <div *ngIf="formErrors.imageUrl" class="error-message">{{ formErrors.imageUrl }}</div>
       </div>
 
+      <div class="form-group">
+        <label for="habitat">Habitat:</label>
+        <input type="text" id="habitat" formControlName="habitat" />
+        <div *ngIf="formErrors.habitat" class="error-message">{{ formErrors.habitat }}</div>
+      </div>
+
       <div class="form-check">
         <input type="checkbox" id="isEndangered" formControlName="isEndangered" />
         <label for="isEndangered">Endangered Species</label>
@@ -49,20 +55,6 @@
       <button type="button" class="add-btn" (click)="addFact()">Add Fact</button>
     </div>
 
-    <div class="form-section">
-      <h3>Habitats</h3>
-      <p class="section-description">Where can this duck be found?</p>
-
-      <div formArrayName="habitat">
-        <div *ngFor="let habitat of habitatArray.controls; let i = index" class="array-form-group">
-          <input [formControlName]="i" placeholder="Enter a habitat" />
-          <button type="button" class="remove-btn" (click)="removeHabitat(i)">✕</button>
-        </div>
-      </div>
-
-      <button type="button" class="add-btn" (click)="addHabitat()">Add Habitat</button>
-    </div>
-
     <div class="form-actions">
       <button type="button" class="cancel-btn" (click)="goBack()">Cancel</button>
       <button type="submit" [disabled]="duckForm.invalid || saving">
@@ -73,6 +65,6 @@
 
   <div class="form-preview">
     <h3>Preview</h3>
-    <pre>{{ duckForm.value | json }}</pre>
+    <pre>{{ duckForm?.value | json }}</pre>
   </div>
 </div>
