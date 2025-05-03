@@ -25,7 +25,7 @@
     transform-origin: bottom center;
     bottom: -5px !important;
     object-position: 0% !important;
-    transform: scale(1.1) !important;
+    transform: scale(1.1);
 }
 
 @keyframes gif {

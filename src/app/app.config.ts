@@ -6,8 +6,8 @@ import { DuckService } from "./services/duck.service";
 import { routes } from "./app.routes";
 import { environment } from "../environments/environment";
 import { authInterceptor } from "./interceptors/auth.interceptor";
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideFirebaseApp, initializeApp } from "@angular/fire/app";
+import { getFirestore, provideFirestore } from "@angular/fire/firestore";
 
 const providers = [
   provideRouter(routes),

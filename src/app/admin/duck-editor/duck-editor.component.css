@@ -108,7 +108,8 @@ textarea {
     color: #333;
 }
 
-button[type="submit"] {
+button[type="submit"],
+.submit-wrapper button {
     background: #4caf50;
     color: white;
 }
@@ -135,4 +136,40 @@ pre {
     margin: 0;
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+.submit-wrapper {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.submit-wrapper button {
+    pointer-events: none;
+}
+
+.form-errors-summary {
+    text-align: center;
+    color: #f44336;
+    font-weight: bold;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    background-color: #ffebee;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.7;
+    }
 }

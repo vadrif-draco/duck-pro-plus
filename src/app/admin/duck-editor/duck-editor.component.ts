@@ -18,8 +18,9 @@ export class DuckEditorComponent implements OnInit {
   formErrors: any = {};
   saving: boolean = false;
   id: string | null = null;
+  showFormErrorsSummary: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router, private activeRoute: ActivatedRoute, private firebaseService: FirebaseService) { }
+  constructor(private fb: FormBuilder, private router: Router, private activeRoute: ActivatedRoute, private firebaseService: FirebaseService) {}
 
   ngOnInit(): void {
     this.activeRoute.paramMap.subscribe((params: ParamMap) => {
@@ -35,7 +36,7 @@ export class DuckEditorComponent implements OnInit {
             this.router.navigate(["/admin/dashboard"]);
           }
           this.createForm(myDuck);
-          this.validateForm();
+          this.validateForm(true);
           this.duckForm!.valueChanges.subscribe(() => {
             this.validateForm();
           });
@@ -47,11 +48,9 @@ export class DuckEditorComponent implements OnInit {
         });
       }
     });
-
   }
 
   createForm(duck?: Duck): void {
-    // BUG: Doesn't show what's wrong with retrieved data if something is wrong
     this.duckForm = this.fb.group({
       id: [duck?.id ?? this.generateId()],
       name: [duck?.name ?? "", [Validators.required, Validators.minLength(3)]],
@@ -59,7 +58,7 @@ export class DuckEditorComponent implements OnInit {
       description: [duck?.description ?? "", [Validators.required, Validators.minLength(50)]],
       imageUrl: [duck?.imageUrl ?? "", [Validators.required, Validators.pattern(/^(assets\/|(http|https):\/\/).*\.(jpeg|jpg|gif|png|webp)$/)]],
       habitat: [duck?.habitat ?? "", [Validators.required, Validators.minLength(5)]],
-      facts: this.fb.array(duck ? duck.facts.map(f => this.fb.control(f)) : [this.fb.control("")]),
+      facts: this.fb.array(duck ? duck.facts.map((f) => this.fb.control(f)) : [this.fb.control("")]),
       isEndangered: [duck?.isEndangered ?? false],
     });
   }
@@ -80,7 +79,7 @@ export class DuckEditorComponent implements OnInit {
     this.factsArray.removeAt(index);
   }
 
-  validateForm(): void {
+  validateForm(forced: boolean = false): void {
     this.formErrors = {};
 
     const form = this.duckForm;
@@ -88,7 +87,7 @@ export class DuckEditorComponent implements OnInit {
     for (const field in this.validationMessages) {
       const control = form?.get(field);
 
-      if (control && control.invalid) {
+      if (control && control.invalid && (control.dirty || control.touched || forced)) {
         this.formErrors[field] = "";
 
         for (const key in control.errors) {
@@ -96,6 +95,19 @@ export class DuckEditorComponent implements OnInit {
         }
       }
     }
+  }
+
+  markFormAsTouched(): void {
+    this.showFormErrorsSummary = true;
+    Object.keys(this.duckForm!.controls).forEach((key) => {
+      const control = this.duckForm!.get(key);
+      if (control instanceof FormArray) {
+        (control as FormArray).controls.forEach((c) => c.markAsTouched());
+      } else {
+        control!.markAsTouched();
+      }
+    });
+    this.validateForm(true);
   }
 
   validationMessages: any = {
@@ -115,10 +127,15 @@ export class DuckEditorComponent implements OnInit {
       required: "Image URL is required.",
       pattern: "Must be a valid image URL ending in jpeg, jpg, gif, png, or webp.",
     },
+    habitat: {
+      required: "Habitat is required.",
+      minlength: "Habitat must be at least 5 characters long.",
+    },
   };
 
   onSubmit(): void {
     if (this.duckForm?.invalid) {
+      this.markFormAsTouched();
       return;
     }
 
@@ -127,7 +144,7 @@ export class DuckEditorComponent implements OnInit {
     if (this.id) {
       this.firebaseService.updateDuck(this.duckForm?.value);
     } else {
-      this.firebaseService.addDuck(this.duckForm?.value)
+      this.firebaseService.addDuck(this.duckForm?.value);
     }
     this.saving = false;
     alert("Duck data saved successfully! Returning to dashboard.");

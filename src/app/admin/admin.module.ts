@@ -17,7 +17,15 @@ import { AdminGuard } from "./guards/admin.guard";
     ReactiveFormsModule,
 
     RouterModule.forChild([
-      { path: "", component: AdminLoginComponent },
+      {
+        path: "", //
+        component: AdminLoginComponent,
+      },
+
+      {
+        path: "login",
+        component: AdminLoginComponent,
+      },
       {
         path: "dashboard",
         component: AdminDashboardComponent,
@@ -32,7 +40,7 @@ import { AdminGuard } from "./guards/admin.guard";
         path: "duck-editor/:id",
         component: DuckEditorComponent,
         canActivate: [AdminGuard],
-      }
+      },
     ]),
   ],
   providers: [AdminGuard],

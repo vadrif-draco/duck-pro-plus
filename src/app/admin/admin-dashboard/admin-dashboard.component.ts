@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { Duck } from "../../interfaces/duck-interface";
 import { DuckService } from "../../services/duck.service";
+import { FirebaseService } from "../../services/firebase.service";
 import { trigger, transition, style, animate } from "@angular/animations";
 
 @Component({
@@ -17,8 +18,9 @@ import { trigger, transition, style, animate } from "@angular/animations";
 export class AdminDashboardComponent implements OnInit {
   ducks: Duck[] = [];
   recentDucks: Duck[] = [];
+  deletingDuck: boolean = false;
 
-  constructor(private duckService: DuckService, private router: Router) {}
+  constructor(private duckService: DuckService, private router: Router, private firebaseService: FirebaseService) {}
 
   ngOnInit(): void {
     if (!this.isAuthenticated()) {
@@ -43,7 +45,7 @@ export class AdminDashboardComponent implements OnInit {
         this.recentDucks = [];
         console.log("No ducks found");
       }
-    })
+    });
   }
 
   getEndangeredDucksCount(): number {
@@ -58,8 +60,26 @@ export class AdminDashboardComponent implements OnInit {
     this.loadDucks();
   }
 
+  deleteDuck(duck: Duck): void {
+    if (confirm(`QUACK!!! Are you sure you want to delete "${duck.name}"?? This action cannot be undone.`)) {
+      this.deletingDuck = true;
+      this.firebaseService
+        .deleteDuck(duck.id)
+        .then(() => {
+          this.deletingDuck = false;
+          alert(`Duck "${duck.name}" has been deleted successfully.`);
+          this.refreshData();
+        })
+        .catch((error) => {
+          this.deletingDuck = false;
+          console.error("Error deleting duck:", error);
+          alert("Failed to delete duck. Please try again.");
+        });
+    }
+  }
+
   logout(): void {
     localStorage.removeItem("admin_authenticated");
-    this.router.navigate(["/admin/login"]);
+    this.router.navigate(["/admin"]);
   }
 }

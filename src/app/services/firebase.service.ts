@@ -1,30 +1,42 @@
 import { Injectable } from "@angular/core";
 import { Observable, of, throwError } from "rxjs";
 import { environment } from "../../environments/environment";
-import { arrayUnion, doc, DocumentReference, Firestore, onSnapshot, updateDoc } from "@angular/fire/firestore";
+import {
+  arrayUnion,
+  collection,
+  CollectionReference,
+  deleteField,
+  doc,
+  DocumentReference,
+  Firestore,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "@angular/fire/firestore";
 import { Duck } from "../interfaces/duck-interface";
-
+import { Globals } from "../../globals";
 
 @Injectable({
   providedIn: "root",
 })
 export class FirebaseService {
-
   ducksDoc: DocumentReference;
-  ducksListObservable: Observable<Duck[]>;
-  ducksList: Duck[] = [];
+  firestoreCollection: CollectionReference;
 
-  // constructor(private fs: Firestore, private duckService: DuckService) {
-  constructor(private fs: Firestore) {
-    console.log("Firebase service initialized");
-    this.ducksDoc = doc(this.fs, `${environment.firestoreCollection}/ducks`);
-    this.ducksListObservable = new Observable<Duck[]>((subscriber) => {
+  simpleDucksList: Duck[] = [];
+  simpleDucksListObservable: Observable<Duck[]>;
+
+  constructor(private fs: Firestore, private globals: Globals) {
+    this.firestoreCollection = collection(this.fs, environment.firestoreCollection);
+    this.ducksDoc = doc(this.fs, environment.firestoreCollection, environment.ducksDocumentId);
+    this.simpleDucksListObservable = new Observable<Duck[]>((subscriber) => {
       onSnapshot(this.ducksDoc, (doc) => {
-        let ducksDocData = doc.data() ?? { "ducksArray": [] };
-        subscriber.next(ducksDocData["ducksArray"]);
-        this.ducksList = ducksDocData["ducksArray"];
+        let ducksDocData = doc.data() ?? {};
+        this.simpleDucksList = Object.values(ducksDocData);
+        subscriber.next(this.simpleDucksList);
       });
     });
+    console.log("Firebase service initialized");
   }
 
   login(email: string, password: string): Observable<any> {
@@ -57,65 +69,44 @@ export class FirebaseService {
     return !!this.getCurrentUser();
   }
 
-  getDucks(): Observable<Duck[]> {
-    console.log("Fetching ducks from Firebase");
-    return this.ducksListObservable;
+  observeDucks(): Observable<Duck[]> {
+    return this.simpleDucksListObservable;
   }
 
   getDuck(id: string): Observable<Duck | undefined> {
-    // const duck = this.ducks.find((d) => d.id === id);
-    // if (!duck) {
-    //   return throwError(() => new Error(`Duck with id ${id} not found`));
-    // }
-    // return of(duck);
     return new Observable<Duck | undefined>((subscriber) => {
       const unsub = onSnapshot(this.ducksDoc, (doc) => {
-        subscriber.next(doc.data()!['ducksArray'].filter((duck: Duck) => (duck.id == id))[0])
-      })
-      return () => { unsub(); };
-    })
+        let ducksDocData = doc.data() ?? {};
+        subscriber.next(ducksDocData[id]);
+      });
+      return () => {
+        unsub();
+      };
+    });
   }
 
   addDuck(duck: Duck): Promise<void> {
-    // this.ducks.push(duck);
-    // return of(duck);
-    return updateDoc(this.ducksDoc, { ducksArray: arrayUnion(duck) })
+    return updateDoc(this.ducksDoc, { [duck.id]: duck });
   }
 
   updateDuck(duck: Duck): Promise<void> {
-    // const index = this.ducks.findIndex((d) => d.id === duck.id);
-    // if (index !== -1) {
-    //   this.ducks[index] = duck;
-    //   return of(duck);
-    // }
-    // return throwError(() => new Error(`Duck with id ${duck.id} not found`));
-    let ducks = [...this.ducksList];
-    const index = ducks.findIndex((d) => d.id == duck.id);
-    if (index !== -1) { ducks[index] = duck; }
-    return updateDoc(this.ducksDoc, { ducksArray: ducks })
+    return updateDoc(this.ducksDoc, { [duck.id]: duck });
   }
 
-  // deleteDuck(id: string): Promise<void> {
-  //   // const index = this.ducks.findIndex((d) => d.id === id);
-  //   // if (index !== -1) {
-  //   //   this.ducks.splice(index, 1);
-  //   //   return of(undefined);
-  //   // }
-  //   // return throwError(() => new Error(`Duck with id ${id} not found`));
-  //   // return updateDoc(this.ducksDoc, {
-  //   //   arrayRemove(duck)
-  //   // })
-  // }
-
-  private handleError<T>(operation = "operation", result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      return of(result as T);
-    };
+  deleteDuck(id: string): Promise<void> {
+    return updateDoc(this.ducksDoc, { [id]: deleteField() });
   }
 
-  // addAllDucks() {
-  //   const allDucksMockData = this.duckService.getDucks()
-  //   return updateDoc(this.ducksDoc, {ducksArray: allDucksMockData})
-  // }
+  resetFirestore() {
+    setDoc(
+      doc(this.fs, environment.firestoreCollection, environment.ducksDocumentId),
+      this.globals.mockDucks.reduce(
+        (ducksDict: Record<string, Duck>, duck: Duck) => {
+          ducksDict[duck.id] = duck;
+          return ducksDict;
+        },
+        {} /* empty dict by default */
+      )
+    );
+  }
 }

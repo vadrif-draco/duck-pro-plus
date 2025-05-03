@@ -68,6 +68,9 @@ h2 {
   margin-top: 0;
   color: #333;
   font-size: 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .duck-description {
@@ -91,4 +94,12 @@ h2 {
   display: flex;
   justify-content: flex-end;
   margin-top: auto;
+}
+
+.duck-scientific-name {
+  font-style: italic;
+  color: #999;
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-left: auto;
 }

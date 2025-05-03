@@ -50,6 +50,7 @@
           </div>
           <div class="duck-actions">
             <button class="duck-action edit" routerLink="/admin/duck-editor/{{ duck.id }}">Edit</button>
+            <button class="duck-action delete" (click)="deleteDuck(duck)" [disabled]="deletingDuck">Delete</button>
           </div>
         </div>
       </div>

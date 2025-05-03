@@ -1,6 +1,12 @@
-<div class="duck-card" *ngIf="duck" [class.endangered]="duck.isEndangered" [class.featured]="duck.isFeatured"
-  appHighlight [highlightColor]="duck.isEndangered ? '#ffebee' : duck.isFeatured ? '#fff8e1' : '#e8f5e9'"
-  (click)="toggleDetails()">
+<div
+  class="duck-card"
+  *ngIf="duck"
+  [class.endangered]="duck.isEndangered"
+  [class.featured]="duck.isFeatured"
+  appHighlight
+  [highlightColor]="duck.isEndangered ? '#ffebee' : duck.isFeatured ? '#fff8e1' : '#e8f5e9'"
+  (click)="toggleDetails()"
+>
   <div class="duck-image-container">
     <img [src]="duck.imageUrl" [alt]="duck.name" class="duck-image" />
     <span *ngIf="duck.isEndangered" class="endangered-label">Endangered</span>
@@ -8,18 +14,21 @@
   </div>
 
   <div class="duck-details">
-    <h2>{{ duck.name }}</h2>
-    <p *ngIf="duck.scientificName" class="duck-scientific-name"><em>{{ duck.scientificName }}</em></p>
+    <h2>
+      {{ duck.name }}
+      <em *ngIf="duck.scientificName" class="duck-scientific-name">{{ duck.scientificName }}</em>
+    </h2>
     <p class="duck-description">
-      {{ showDetails ?
-      (duck.description || (duck.facts && duck.facts.length > 0 ? duck.facts[0] : '')) :
-      ((duck.description || (duck.facts && duck.facts.length > 0 ? duck.facts[0] : '')) | truncate : 45)
+      {{
+        showDetails
+          ? duck.description || (duck.facts && duck.facts.length > 0 ? duck.facts[0] : "")
+          : (duck.description || (duck.facts && duck.facts.length > 0 ? duck.facts[0] : "") | truncate : 45)
       }}
     </p>
 
     <div class="duck-metadata" [@expandCollapse]="showDetails ? 'expanded' : 'collapsed'">
       <p class="habitat-info"><strong>Habitat:</strong> {{ duck.habitat }}</p>
-      <div *ngIf="duck.facts && duck.facts.length > 0" class="facts-list">
+      <div *ngIf="(duck.facts && duck.facts.length > 1) || duck.description" class="facts-list">
         <p><strong>Facts:</strong></p>
         <ul>
           <li *ngFor="let fact of duck.facts">{{ fact }}</li>

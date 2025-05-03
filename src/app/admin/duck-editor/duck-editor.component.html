@@ -57,10 +57,13 @@
 
     <div class="form-actions">
       <button type="button" class="cancel-btn" (click)="goBack()">Cancel</button>
-      <button type="submit" [disabled]="duckForm.invalid || saving">
-        {{ saving ? "Saving..." : "Save Duck" }}
-      </button>
+      <div class="submit-wrapper" (click)="duckForm.invalid ? markFormAsTouched() : onSubmit()">
+        <button type="button" [disabled]="duckForm.invalid || saving">
+          {{ saving ? "Saving..." : "Save Duck" }}
+        </button>
+      </div>
     </div>
+    <div *ngIf="showFormErrorsSummary" class="form-errors-summary">Please fix the validation errors above to continue.</div>
   </form>
 
   <div class="form-preview">

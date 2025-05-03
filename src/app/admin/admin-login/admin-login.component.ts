@@ -40,7 +40,11 @@ export class AdminLoginComponent implements OnInit {
   constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
-    localStorage.removeItem("admin_authenticated");
+    // Check if already authenticated and redirect to dashboard if true
+    if (localStorage.getItem("admin_authenticated") === "true") {
+      this.router.navigate(["/admin/dashboard"]);
+      return;
+    }
 
     this.loginForm = this.fb.group({
       username: ["", [Validators.required, Validators.minLength(4)]],
